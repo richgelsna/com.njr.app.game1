@@ -4,29 +4,28 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.concurrent.TimeUnit;
 
 import com.njr.game.engine.io.KeyInput;
 import com.njr.game.engine.io.Window;
 import com.njr.game.engine.object.ID;
 import com.njr.game.engine.object.Player;
+import com.njr.game.util.SimpleLogger;
+
+import static com.njr.game.GameProperties.*;
 
 public class GameMain extends Canvas implements Runnable {
-	private static final long serialVersionUID = -2729237790344954097L;
-
-	//TODO: private?
-	public static final int WIDTH = 640;
-	public static final int HEIGHT = WIDTH / 12 * 9;
-
+	private static final long serialVersionUID = -2729237790344954097L;	
 	private Thread thread;
 	private boolean running = false;
 
+	public static final int WIDTH = GameProperties.WIDTH;
+	public static final int HEIGHT = GameProperties.HEIGHT;
 	
 	private Handler handler;
 	
 	public GameMain() {
 		handler = new Handler();
-		
-		//TODO: Figure out this.addKeyListener on my own time.
 		this.addKeyListener(new KeyInput(handler));
 		new Window(WIDTH, HEIGHT, "game1", this);
 		
@@ -39,6 +38,11 @@ public class GameMain extends Canvas implements Runnable {
 	}
 
 	public void run() {
+		SimpleLogger logger = new SimpleLogger(APP_LOGLEVEL, this.getClass());
+		long framerateReportMS = TimeUnit.SECONDS.toMillis(REPORT_FRAMERATE_TIMING);
+		
+		logger.info("Reporting framerate every " + REPORT_FRAMERATE_TIMING  + " seconds.");
+		
 		this.requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -59,12 +63,13 @@ public class GameMain extends Canvas implements Runnable {
 			if(running)
 				render();
 			frames++;
-
-			if(System.currentTimeMillis() - timer > 1000)
+			
+			if(System.currentTimeMillis() - timer > framerateReportMS)
 			{
-				timer += 1000;
-				//TODO: Logger
-//				System.out.println("FPS: "+ frames);
+				timer += framerateReportMS;
+				int framesActual = frames/REPORT_FRAMERATE_TIMING;
+				if(framesActual<60) logger.warn("FPS: " + framesActual);
+				else logger.info("FPS: " + (frames/REPORT_FRAMERATE_TIMING));
 				frames = 0;
 			}
 		}

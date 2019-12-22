@@ -3,13 +3,16 @@ package com.njr.game.engine.io;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import com.njr.game.GameProperties;
 import com.njr.game.Handler;
 import com.njr.game.engine.object.GameObject;
 import com.njr.game.engine.object.ID;
+import com.njr.game.util.SimpleLogger;
 
 public class KeyInput extends KeyAdapter {
 
 	private Handler handler;
+	private SimpleLogger logger = new SimpleLogger(GameProperties.ENGINE_LOGLEVEL, this.getClass());
 	
 	public KeyInput(Handler handler) {
 		this.handler = handler;
@@ -18,7 +21,7 @@ public class KeyInput extends KeyAdapter {
 	// TODO: Figure out logger.  Log on "debug" mode ?
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		System.out.println(key + "key pressed");
+		logger.debugVerbose(key + " key pressed");
 		for(GameObject object : handler.getObjects()) {
 			if(object.getId() == ID.Player) {				
 				if(key == KeyEvent.VK_W) object.setVelocityY(-5);
@@ -38,7 +41,7 @@ public class KeyInput extends KeyAdapter {
 	
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-		System.out.println(key + " key released");
+		logger.debugVerbose(key + " key released");
 		for(GameObject object : handler.getObjects()) {
 			if(object.getId() == ID.Player) {				
 				if(key == KeyEvent.VK_W) object.setVelocityY(0);
