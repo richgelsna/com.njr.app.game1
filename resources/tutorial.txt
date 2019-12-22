@@ -58,7 +58,7 @@ To fix Input lag direction switch: InPuTlAg
 			 ...
 		}
 		
-To fix nonborder collision issues: 
+To fix nonborder collision issues: bOrDeRcOlLiDe
 If it works for someone yet, i want to point out that you dont need to get the exact amount of pixelsyour window has. You can simply "add" that difference to the size of it, so that the entire thing you see is the actual size of the game.
 
         JFrame frame = new JFrame(title);
