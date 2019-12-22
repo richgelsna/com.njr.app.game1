@@ -1,7 +1,98 @@
 This is made from a tutorial from this youtube playlist:
 https://www.youtube.com/playlist?list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa
 
-Currently on Video 4:
-https://www.youtube.com/watch?v=5ufOPX8N1Rg&list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa&index=5&t=0s
+Currently on Video 5:
+https://youtu.be/3paMFMwVfWU?list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa&t=0s (0 seconds in)
 
-test
+TODO/NOTES:
+	> Input lag when switching directions.  I don't understand this, but there is a comment copy+pasted below to help remedy this. (Ctl+f: InPuTlAg)
+	> I should create a game.properties file.  This will hold values that are key to the game and can be configured.  Currently, there's a GameProperties.java class.  Perhaps I can keep using that to read the props file.
+		- This can be used for creating or at least dictating logging levels for loggers.
+		- Also, Window Width and Window Height.
+		- Perhaps Colors of the game should be set in here as well???
+		- Framerate timer
+	> Update logger, or create a logger abstract class/reimplement the class to log to log files?  Log file names will be incrementally set.  
+		- Update logs to output unix timestamps...Perhaps a value set to on by default but can be switched off.
+		- If log files are written out, make sure .gitignore ignores .log files.  Probably put the log files in resources?
+	> Enemies, and player don't collide correctly with the edge of the screen.  There is a player comment suggestion on how to fix this.  (Ctrl +f: bOrDeRcOlLiDe)
+	
+	
+	
+	
+	
+	
+To fix Input lag direction switch: InPuTlAg
+	There is a short system delay when using the "keyPressed()" function that determines whether the key is being typed or held down, and it will cause a minor, but annoying, delay when changing your player's velocity. To fix this, you must implement a boolean control mechanism into your KeyInput class. 
+
+	To do this, create four private boolean variables and set them equal to false: 
+	*do this at the top of the page under your private handler
+
+	private boolean uP = false;
+	private boolean dP = false;
+	private boolean lP = false;
+	private boolean rP = false;
+
+	In your keyPressed() function, simply set the respective boolean variable to "true" if its being pressed. Do this for all four keys. Example: 
+
+	if(tempObj.getId() == ID.Player){
+					
+					if(key == KeyEvent.VK_UP ){
+						uP = true;
+						tempObj.setVelY(-5);
+					}
+		 ....
+		 }
+
+	Then, in your "keyReleased()" function, inside each of the four "if" statements, set the respective boolean variable to false, then make a nested "if - else" statement that will determine whether the OPPOSITE key is being pressed. Set the velocity to 5 (or -5) if the opposite is true, and false if not. Do this for all four keys. Example: 
+
+	if(tempObj.getId() == ID.Player){
+					if(key == KeyEvent.VK_UP){
+						uP = false;
+						if(dP){
+							tempObj.setVelY(5);
+						}
+						else{
+							tempObj.setVelY(0);
+						}
+					}
+			 ...
+		}
+		
+To fix nonborder collision issues: bOrDeRcOlLiDe
+If it works for someone yet, i want to point out that you dont need to get the exact amount of pixelsyour window has. You can simply "add" that difference to the size of it, so that the entire thing you see is the actual size of the game.
+
+        JFrame frame = new JFrame(title);
+        // we create our window
+
+        frame.add(game);
+        // we add the game into it
+        frame.pack();
+        // we pack the game into the window
+
+        // this allows us to get the size of thecontent of the window
+
+        int x = frame.getInsets().left + frame.getInsets().right;
+ 
+        // x is the amount of pixels hidden by the left and right borders of our window 
+
+        int y = frame.getInsets().top + frame.getInsets().bottom;
+
+        // y is the amount of pixels hidden by the title bar and the bottom border of our window
+
+        // now we set the size of our window as the size wanted PLUS the amount of pixels hidden
+
+        frame.setPreferredSize(new Dimension(width + x, height + y));
+        
+        frame.setMaximumSize(new Dimension(width + x, height + y));
+        frame.setMinimumSize(new Dimension(width + x, height + y));
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+
+        frame.setVisible(true);
+
+        game.start();
+
+
+Now you can simply create a function in which you get the width/height of a game object, if you dont want to manage numbers (like 32, 16...) and... problem solved :D

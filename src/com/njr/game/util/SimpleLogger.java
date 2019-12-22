@@ -1,7 +1,7 @@
 package com.njr.game.util;
 
 public class SimpleLogger {
-	private static int MAXCLASSWORDSIZE = 25;
+	private static int MAXCLASSWORDSIZE = 35;
 	
 	private LoggerLevel loggerLevel;
 	private String reportingClass;

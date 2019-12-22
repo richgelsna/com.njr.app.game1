@@ -29,13 +29,11 @@ public class KeyInput extends KeyAdapter {
 				if(key == KeyEvent.VK_D) object.setVelocityX(5);
 				if(key == KeyEvent.VK_S) object.setVelocityY(5);
 			}
-			
-			if(object.getId() == ID.Player2) {
-				if(key == KeyEvent.VK_UP) object.setVelocityY(-5);
-				if(key == KeyEvent.VK_LEFT) object.setVelocityX(-5);
-				if(key == KeyEvent.VK_RIGHT) object.setVelocityX(5);
-				if(key == KeyEvent.VK_DOWN) object.setVelocityY(5);
-			}
+		}
+		
+		if(key == KeyEvent.VK_ESCAPE) {
+			logger.info("Escape character detected; exiting game.");
+			System.exit(1);
 		}
 	}
 	
@@ -48,13 +46,6 @@ public class KeyInput extends KeyAdapter {
 				if(key == KeyEvent.VK_A) object.setVelocityX(0);
 				if(key == KeyEvent.VK_D) object.setVelocityX(0);
 				if(key == KeyEvent.VK_S) object.setVelocityY(0);
-			}
-			
-			if(object.getId() == ID.Player2) {
-				if(key == KeyEvent.VK_UP) object.setVelocityY(0);
-				if(key == KeyEvent.VK_LEFT) object.setVelocityX(0);
-				if(key == KeyEvent.VK_RIGHT) object.setVelocityX(0);
-				if(key == KeyEvent.VK_DOWN) object.setVelocityY(0);
 			}
 		}
 	}
