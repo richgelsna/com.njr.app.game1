@@ -2,16 +2,19 @@ package com.njr.game.engine.object;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import com.njr.game.GameProperties;
+import com.njr.game.Handler;
 
 public class BasicEnemy extends GameObject{
 	
-	private int widthSize = 16;
-	private int heightSize = 16;
+	private int DEFAULTWIDTH = 16;
+	private int DEFAULTHEIGHT = 16;
+	private Color DEFAULTCOLOR = Color.RED;
 
-	public BasicEnemy(int x, int y, ID id) {
-		super(x, y, id);
+	public BasicEnemy(int x, int y, ID id, Handler handler) {
+		super(x, y, id, handler);
 		velocityX = 5;
 		velocityY = 5;
 	}
@@ -28,13 +31,20 @@ public class BasicEnemy extends GameObject{
 		if(x<=0 || (x+32)>=GameProperties.WIDTH) {
 			velocityX *= -1;
 		}
+		
+		handler.addObject(new Trail(x, y, ID.Trail, DEFAULTCOLOR,  DEFAULTWIDTH, DEFAULTHEIGHT, 0.045f, this.handler));
 	}
 
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.RED);
-		g.fillRect(x, y, widthSize, heightSize);
+		g.setColor(DEFAULTCOLOR);
+		g.fillRect(x, y, DEFAULTWIDTH, DEFAULTHEIGHT);
 		
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, DEFAULTWIDTH, DEFAULTHEIGHT);
 	}
 
 }

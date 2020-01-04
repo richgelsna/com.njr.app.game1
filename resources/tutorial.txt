@@ -1,8 +1,8 @@
 This is made from a tutorial from this youtube playlist:
 https://www.youtube.com/playlist?list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa
 
-Currently on Video 5:
-https://youtu.be/3paMFMwVfWU?list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa&t=0s (0 seconds in)
+Currently on Video 6:
+https://www.youtube.com/watch?v=KpzvlvxZkcE&list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa&index=6
 
 TODO/NOTES:
 	> Input lag when switching directions.  I don't understand this, but there is a comment copy+pasted below to help remedy this. (Ctl+f: InPuTlAg)
@@ -15,6 +15,8 @@ TODO/NOTES:
 		- Update logs to output unix timestamps...Perhaps a value set to on by default but can be switched off.
 		- If log files are written out, make sure .gitignore ignores .log files.  Probably put the log files in resources?
 	> Enemies, and player don't collide correctly with the edge of the screen.  There is a player comment suggestion on how to fix this.  (Ctrl +f: bOrDeRcOlLiDe)
+	> Implement an "Object Aware" system, so that the handler is passed to every object.  How can objects interact with each other?
+	> Review making soft copies of lists so that calling .add while in loop of list doesn't break it....
 	
 	
 	
@@ -93,6 +95,5 @@ If it works for someone yet, i want to point out that you dont need to get the e
         frame.setVisible(true);
 
         game.start();
-
-
+        
 Now you can simply create a function in which you get the width/height of a game object, if you dont want to manage numbers (like 32, 16...) and... problem solved :D

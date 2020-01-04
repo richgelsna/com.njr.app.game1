@@ -7,6 +7,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import com.njr.game.engine.io.KeyInput;
@@ -20,6 +21,7 @@ public class GameMain extends Canvas implements Runnable {
 	private static final long serialVersionUID = -2729237790344954097L;	
 	private Thread thread;
 	private boolean running = false;
+	private Random r;
 
 	public static final int WIDTH = GameProperties.WIDTH;
 	public static final int HEIGHT = GameProperties.HEIGHT;
@@ -30,13 +32,21 @@ public class GameMain extends Canvas implements Runnable {
 	public GameMain() {
 		handler = new Handler();
 		this.addKeyListener(new KeyInput(handler));
+		
+		// TODO: we pass in handler to GameObjects so that they can be "aware" of other game objects.
+		// I could make the handler a static public object that the GameObjects themselves could access, rather than passing them in.
+		// Even better yet, I could look up how the "Aware" design pattern works (which we use at work), and see if I can't alter the code to use that.
+		handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player, handler));
+//		handler.addObject(new BasicEnemy(WIDTH/2-32, HEIGHT/2-32, ID.BasicEnemy, handler));
+		
+		r = new Random();
+		handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+		handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+		handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
+		
 		new Window(WIDTH, HEIGHT, "game1", this);
 		
 		hud = new HUD();
-		
-		handler.addObject(new Player(WIDTH/2-32, HEIGHT/2-32, ID.Player));
-		handler.addObject(new BasicEnemy(WIDTH/2-32, HEIGHT/2-32, ID.BasicEnemy));
-		
 	}
 
 	public static void main(String[] args){

@@ -10,13 +10,16 @@ public class Handler {
 	LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
 	public void tick() {
-		for(GameObject object : objects) {
+		LinkedList<GameObject> shallowCopyList = new LinkedList<>(objects);
+
+		for(GameObject object : shallowCopyList) {
 			object.tick();
 		}
 	}
 	
 	public void render(Graphics g) {
-		for(GameObject object : objects) {
+		LinkedList<GameObject> shallowCopyList = new LinkedList<>(objects);
+		for(GameObject object : shallowCopyList) {
 			object.render(g);
 		}
 	}

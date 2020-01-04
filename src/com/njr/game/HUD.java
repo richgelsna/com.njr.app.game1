@@ -14,7 +14,7 @@ public class HUD {
 	private static int MINHEALTH=0;
 	
 	public void tick() {
-		HEALTH = IntegerUtil.clamp(HEALTH-1, MINHEALTH, MAXHEALTH);
+		HEALTH = IntegerUtil.clamp(HEALTH, MINHEALTH, MAXHEALTH);
 	}
 	
 	public void render(Graphics g) {

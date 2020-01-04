@@ -1,6 +1,9 @@
 package com.njr.game.engine.object;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
+
+import com.njr.game.Handler;
 
 public abstract class GameObject {
 	protected int x;
@@ -8,15 +11,18 @@ public abstract class GameObject {
 	protected int y;
 	protected int velocityY;
 	protected ID id;
+	protected Handler handler;
 	
-	public GameObject(int x, int y, ID id) {
+	public GameObject(int x, int y, ID id, Handler handler) {
 		this.x=x;
 		this.y=y;
 		this.id=id;
+		this.handler = handler;
 	}
 	
 	public abstract void tick();
 	public abstract void render(Graphics g);
+	public abstract Rectangle getBounds();
 	
 	public int getX() {
 		return x;
