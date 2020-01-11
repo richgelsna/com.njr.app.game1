@@ -1,0 +1,38 @@
+Problem: Currently this game has circular object dependencies/tightly coupled objects with a Handler object storing objects that you
+  then pass the handler object to.  On top of that, the handler passes a soft-copy of a list to each of these objects so that they
+  don't modify the very list that keeps track of themselves ( :S ).
+  
+I don't want to fix this problem for this game, since this game is following  a tutorial.  Creating an entire architecture for this game
+  will restructure the code severely enough to pull my fully off track of the tutorial I'm following.  I've already strayed wtih my code
+  a lot up to this point.  If I implement an architecture, every new episode of the tutorial I follow, I'll be spending way too much time
+  thinking of "Hmmm, how do I fit this into the structure of my architecture", and it will ultimately make the tutorial RIDICULOUS to
+  follow.  Every time he modifies object "A.java" I'll be modifying either file "A.A.A.java" or "A.B.A.java" or "A.B.C.java", etc, etc.
+  
+With that being said, I find code structure and architecture an extremely interesting topic.  So I'll continue to discover 
+  "architecturally" weak parts of the code and explore ways to rectify it.  I'll also research different architectures that people and
+  engines use for game dev/similar problems, and report them in this file.  This is a "notes" file and isn't structured in any particular
+  way - notes and ideas will be sporatically be reported wherever seems fit.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For the circular "Handler" issue - 
+  This is the first sign of a lack of architecture for this project (that, and lack of java packages, which I've tried to maintain,
+    ableit, poorly).
+    
+  You store a GameObject into a handler class that you then store the handler into each GameObject.  In addition, all the handler
+    really does is loop through and "tick" each object, and "render"s it.  Each object then calls the handler to get a list of
+    all other objects and then interacts with it.... making each GameObject dependent (coupled) with each other.
+    
+  One suggestion by a comment in this stackexchange thread mentions an architecure: 
+    https://softwareengineering.stackexchange.com/questions/284999/how-can-i-have-objects-interacting-and-communicating-with-each-other-without-for
+    "Much of the game industry has moved towards the Entity-Component-System architecture, and its variations.
+    It is a different mindset from traditional OO approaches but it works well and does make sense once the concept sinks in. 
+    Unity uses it. Actually, Unity just uses the Entity-Component part but is based off of ECS."
+    
+  When googling Entity-Component-System game architecture, I find a very good answer to why it's used in games.  It's too large
+    and elaborate to quote the entire comment here.
+    https://softwareengineering.stackexchange.com/questions/186696/is-it-reasonable-to-build-applications-not-games-using-a-component-entity-syst
+    
+  Now, I am more familliar with MVC architecture, but I'm not sure if it's a standard use in game dev.  I should google to see if it's 
+    good for game dev and how they make it "work".  I should see if I can figure out an example (simple game) that compares the
+    two architectures, and also see if I can find even more alternatives.

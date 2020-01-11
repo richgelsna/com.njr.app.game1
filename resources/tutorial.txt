@@ -16,6 +16,7 @@ TODO/NOTES:
 		- If log files are written out, make sure .gitignore ignores .log files.  Probably put the log files in resources?
 	> Enemies, and player don't collide correctly with the edge of the screen.  There is a player comment suggestion on how to fix this.  (Ctrl +f: bOrDeRcOlLiDe)
 	> Implement an "Object Aware" system, so that the handler is passed to every object.  How can objects interact with each other?
+		- This is a much bigger issue regarding software architecture, which I won't implement into this game.  If I implement a proper architecture, then the code will get far too "off-base" from the tutorial.  With that being said, consult architectureResearch.txt for ideas on how to structure future game code.
 	> Review making soft copies of lists so that calling .add while in loop of list doesn't break it....
 	
 	
