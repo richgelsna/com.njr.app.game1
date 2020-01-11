@@ -7,24 +7,64 @@ import com.njr.game.util.IntegerUtil;
 import com.njr.game.util.SimpleLogger;
 
 public class HUD {
-	SimpleLogger logger = new SimpleLogger(GameProperties.APP_LOGLEVEL, this.getClass());
+	SimpleLogger logger = new SimpleLogger.LoggerBuilder(GameProperties.APP_LOGLEVEL).reportingClass(this.getClass()).silentPeriod(6).maxMessagesPerPeriod(2).build();
 	
-	public static int HEALTH = 100;
 	private static int MAXHEALTH=100;
 	private static int MINHEALTH=0;
+	public static int HEALTH = MAXHEALTH;
+	
+	private static Color TWOTHIRDHEALTHCOLOR = new Color(0, 188, 35);
+	private static Color FULLHEALTHCOLOR = new Color(0, 128, 128);
+	private static Color ONETHIRDHEALTHCOLOR = new Color(252, 241, 83);
+	private static Color NOHEALTHCOLOR = new Color(220, 0, 0);
 	
 	public void tick() {
 		HEALTH = IntegerUtil.clamp(HEALTH, MINHEALTH, MAXHEALTH);
 	}
 	
 	public void render(Graphics g) {
+		// background of HP bar (Seen while missing health)
 		g.setColor(Color.gray);
 		g.fillRect(15, 15, 200, 32);
 		
-		g.setColor(new Color(40, 158, 71));
+		// Remaining health
+		double healthPercent =  ((double)HEALTH/(double)MAXHEALTH);
+		try {
+			if(healthPercent > 0.667) {
+				double gradientPerc = (healthPercent - 0.667)*3;
+				g.setColor(calculateColorTransition(FULLHEALTHCOLOR, TWOTHIRDHEALTHCOLOR, gradientPerc));
+			}
+			else if(healthPercent > 0.334) {
+				// Calculate rough gradient between both colors
+				double gradientPerc = (healthPercent - 0.334)*3;
+				g.setColor(calculateColorTransition(TWOTHIRDHEALTHCOLOR, ONETHIRDHEALTHCOLOR, gradientPerc));
+			}
+			else {
+				double gradientPerc = healthPercent*3;
+				g.setColor(calculateColorTransition(ONETHIRDHEALTHCOLOR, NOHEALTHCOLOR, gradientPerc));
+			}
+		} catch(Exception e) {
+			logger.error(e.getMessage());
+		}
 		g.fillRect(15, 15, HEALTH*2, 32);
 		
+		// Outline of HP bar
 		g.setColor(Color.black);
 		g.drawRect(15, 15, 200, 32);
+	}
+	
+	private Color calculateColorTransition(Color fullColor, Color emptyColor, double percent) throws Exception {
+		if(percent>1 || percent<0) {
+			throw new Exception("percent must be a percentile between 0 and 1.  It is " + percent + ".");
+		}
+		
+		// fullColor is target, emptyColor is base.
+		int transitionR = IntegerUtil.calculateGradient(percent, emptyColor.getRed(), fullColor.getRed());
+		int transitionG = IntegerUtil.calculateGradient(percent, emptyColor.getGreen(), fullColor.getGreen());
+		int transitionB = IntegerUtil.calculateGradient(percent, emptyColor.getBlue(), fullColor.getBlue());
+		
+		logger.debug("Percent: " + percent);
+		logger.debugVerbose("RGB Transition:" + "\n\tR:" + transitionR + "\n\tG:" + transitionG + "\n\tB:" + transitionB);
+		return new Color(transitionR, transitionG, transitionB);
 	}
 }
