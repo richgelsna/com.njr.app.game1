@@ -1,9 +1,3 @@
-This is made from a tutorial from this youtube playlist:
-https://www.youtube.com/playlist?list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa
-
-Currently on Video 7:
-https://www.youtube.com/watch?v=JrSjwQbTldg&list=PLWms45O3n--6TvZmtFHaCWRZwEqnz2MHa&index=7
-
 TODO/NOTES:
 	> Input lag when switching directions.  I don't understand this, but there is a comment copy+pasted below to help remedy this. (Ctl+f: InPuTlAg)
 	> I should create a game.properties file.  This will hold values that are key to the game and can be configured.  Currently, there's a GameProperties.java class.  Perhaps I can keep using that to read the props file.
