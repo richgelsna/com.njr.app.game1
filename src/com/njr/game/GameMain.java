@@ -19,14 +19,15 @@ import com.njr.game.util.SimpleLogger;
 
 public class GameMain extends Canvas implements Runnable {
 	private static final long serialVersionUID = -2729237790344954097L;	
-	private Thread thread;
-	private boolean running = false;
-	private Random r;
-
 	public static final int WIDTH = GameProperties.WIDTH;
 	public static final int HEIGHT = GameProperties.HEIGHT;
 	
+	private Thread thread;
+	private boolean running = false;
+	
+	private Random r;
 	private Handler handler;
+	private Spawn spawner;
 	private HUD hud;
 	
 	public GameMain() {
@@ -41,12 +42,11 @@ public class GameMain extends Canvas implements Runnable {
 		
 		r = new Random();
 		handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
-		handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
-		handler.addObject(new BasicEnemy(r.nextInt(WIDTH), r.nextInt(HEIGHT), ID.BasicEnemy, handler));
 		
 		new Window(WIDTH, HEIGHT, "game1", this);
 		
 		hud = new HUD();
+		spawner = new Spawn(handler, hud);
 	}
 
 	public static void main(String[] args){
@@ -94,6 +94,7 @@ public class GameMain extends Canvas implements Runnable {
 	private void tick() {
 		handler.tick();
 		hud.tick();
+		spawner.tick();
 	}
 	
 	private void render() {

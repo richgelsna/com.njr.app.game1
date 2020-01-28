@@ -33,7 +33,7 @@ public class IntegerUtil {
 	//		  Keeping it private until that question is answered (or needed publicly LMFAO).
 	private static int sumTowards(int additive, int baseNumber, int targetNumber) {
 		if( (baseNumber - targetNumber) == 0) {
-			logger.warn("baseNumber and otherNumber are the same number.");
+			logger.warn("baseNumber " + baseNumber + " and otherNumber " + targetNumber + " are the same number.");
 			return baseNumber;
 		}
 		

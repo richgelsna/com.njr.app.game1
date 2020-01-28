@@ -7,28 +7,38 @@ public class SimpleLogger {
 	// otherwise, it will be per object.
 	private static int MAXCLASSWORDSIZE = 35;
 	
-	private LoggerLevel loggerLevel;
-	private String reportingClass;
+	private LoggerLevel loggerLevel = LoggerLevel.CRITICAL;
+	private String reportingClass = "";
 	private long silentPeriod = 0;
 	private int maxMessagesPerPeriod = 100;
 	private long periodStart = 0;
 	private int reportedMessagesSincePeriodStart = 0;
 	
 	public SimpleLogger(LoggerLevel loggerLevel) {
-		this.loggerLevel = loggerLevel;
+		if( loggerLevel != null) {
+			this.loggerLevel = loggerLevel;
+		}
 	}
 	
 	public SimpleLogger(LoggerLevel loggerLevel, Class reportingClass) {
-		this.loggerLevel = loggerLevel;
-		this.reportingClass = chopClassName(reportingClass.getCanonicalName());
+		if( loggerLevel != null) {
+			this.loggerLevel = loggerLevel;
+		}
+		if(reportingClass != null) {
+			this.reportingClass = chopClassName(reportingClass.getCanonicalName());
+		}
 	}
 	
 	// silentPeriodSeconds: A period of time that will limit the number of messages in a given timespan to deafen spam.
 	//  Set maxMessages to allow how many messages should be allowed.
 	//	Set to 0 if you want infinite messages (or don't instantiate at all).
 	public SimpleLogger(LoggerLevel loggerLevel, Class reportingClass, int silentPeriodSeconds) {
-		this.loggerLevel = loggerLevel;
-		this.reportingClass = chopClassName(reportingClass.getCanonicalName());
+		if( loggerLevel != null) {
+			this.loggerLevel = loggerLevel;
+		}
+		if(reportingClass != null) {
+			this.reportingClass = chopClassName(reportingClass.getCanonicalName());
+		}
 		this.silentPeriod = TimeUnit.SECONDS.toMillis(silentPeriodSeconds);
 	}
 	
@@ -98,6 +108,8 @@ public class SimpleLogger {
 					index++;
 				}
 				word = preWord + className;
+		} else if( word == null ) {
+			return "";
 		}
 		
 		return word;
@@ -180,18 +192,15 @@ public class SimpleLogger {
 				throw new RuntimeException("SimpleLogger requires LoggerLevel");
 			}
 			
-			if(loggerLevel != null && reportingClass != null) {
-				logger = new SimpleLogger(loggerLevel, reportingClass);
-			} else {
-				logger = new SimpleLogger(loggerLevel);
-			}
+			logger = new SimpleLogger(loggerLevel, reportingClass);
 			
 			if(silentPeriod>=0) {
 				logger.setSilentPeriod(silentPeriod);
 			} else {
 				throw new RuntimeException("SimpleLogger requires silent period 0 or larger.");
 			}
-			if(maxMessagesPerPeriod>1) {
+			
+			if(maxMessagesPerPeriod>=1) {
 				logger.setMaxMessagesPerPeriod(maxMessagesPerPeriod);
 			} else {
 				throw new RuntimeException("SimpleLogger requires max messages 1 or larger.");

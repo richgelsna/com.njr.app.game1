@@ -13,13 +13,16 @@ public class HUD {
 	private static int MINHEALTH=0;
 	public static int HEALTH = MAXHEALTH;
 	
-	private static Color TWOTHIRDHEALTHCOLOR = new Color(0, 188, 35);
 	private static Color FULLHEALTHCOLOR = new Color(0, 128, 128);
+	private static Color TWOTHIRDHEALTHCOLOR = new Color(0, 188, 35);
 	private static Color ONETHIRDHEALTHCOLOR = new Color(252, 241, 83);
 	private static Color NOHEALTHCOLOR = new Color(220, 0, 0);
 	
+	private int score = 0;
+	private int level = 1;
 	public void tick() {
 		HEALTH = IntegerUtil.clamp(HEALTH, MINHEALTH, MAXHEALTH);
+		score++;
 	}
 	
 	public void render(Graphics g) {
@@ -29,6 +32,7 @@ public class HUD {
 		
 		// Remaining health
 		double healthPercent =  ((double)HEALTH/(double)MAXHEALTH);
+		logger.debug("Player health %: " + healthPercent);
 		try {
 			if(healthPercent > 0.667) {
 				double gradientPerc = (healthPercent - 0.667)*3;
@@ -36,7 +40,7 @@ public class HUD {
 			}
 			else if(healthPercent > 0.334) {
 				// Calculate rough gradient between both colors
-				double gradientPerc = (healthPercent - 0.334)*3;
+			 	double gradientPerc = (healthPercent - 0.334)*3;
 				g.setColor(calculateColorTransition(TWOTHIRDHEALTHCOLOR, ONETHIRDHEALTHCOLOR, gradientPerc));
 			}
 			else {
@@ -51,6 +55,27 @@ public class HUD {
 		// Outline of HP bar
 		g.setColor(Color.black);
 		g.drawRect(15, 15, 200, 32);
+		
+		// score & level
+		g.setColor(Color.white);
+		g.drawString("Score: " + score, 14, 64);
+		g.drawString("Level: " + level, 14, 80);
+	}
+	
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	public int getScore() {
+		return this.score;
+	}
+	
+	public int getLevel() { 
+		return this.level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	
 	private Color calculateColorTransition(Color fullColor, Color emptyColor, double percent) throws Exception {
@@ -63,8 +88,8 @@ public class HUD {
 		int transitionG = IntegerUtil.calculateGradient(percent, emptyColor.getGreen(), fullColor.getGreen());
 		int transitionB = IntegerUtil.calculateGradient(percent, emptyColor.getBlue(), fullColor.getBlue());
 		
-		logger.debug("Percent: " + percent);
 		logger.debugVerbose("RGB Transition:" + "\n\tR:" + transitionR + "\n\tG:" + transitionG + "\n\tB:" + transitionB);
 		return new Color(transitionR, transitionG, transitionB);
 	}
+	
 }

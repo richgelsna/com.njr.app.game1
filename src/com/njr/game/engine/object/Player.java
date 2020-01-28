@@ -40,8 +40,10 @@ public class Player extends GameObject {
 
 	private void collision() {
 		for(GameObject gameObject : handler.getObjects()) {
-			if(gameObject.getId() == ID.BasicEnemy && this.getBounds().intersects(gameObject.getBounds())) {
-				HUD.HEALTH -= 2;
+			if(gameObject.getId() == ID.BasicEnemy || gameObject.getId() == ID.VerticallyFastEnemy) {
+				if(this.getBounds().intersects(gameObject.getBounds())) {
+					HUD.HEALTH -= 2;
+				}
 			}
 		}
 	}
